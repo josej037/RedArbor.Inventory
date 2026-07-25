@@ -12,6 +12,5 @@ public class Product : Base
 
     public virtual ICollection<InventoryEntryDetail> InventoryEntryDetails { get; set; } = new List<InventoryEntryDetail>();
     public virtual ICollection<InventoryExitDetail> InventoryExitDetails { get; set; } = new List<InventoryExitDetail>();
-
     public virtual ICollection<InventoryMovement> InventoryMovements { get; set; } = new List<InventoryMovement>();
 }

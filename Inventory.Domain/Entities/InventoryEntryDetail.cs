@@ -6,7 +6,7 @@ public class InventoryEntryDetail : Base
     public int ProductId { get; set; }
     public decimal Quantity { get; set; }
     public decimal UnitCost { get; set; }
-    public decimal TotalAmount => Quantity * UnitCost;
+    public decimal TotalAmount { get; set; }
 
     public InventoryEntry InventoryEntry { get; set; } = default!;
     public Product Product { get; set; } = default!;

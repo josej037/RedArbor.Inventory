@@ -10,7 +10,6 @@ public class InventoryMovement : Base
     public decimal Quantity { get; set; }
     public decimal StockBefore { get; set; }
     public decimal StockAfter { get; set; }
-
     public Product Product { get; set; } = default!;
 
 }
