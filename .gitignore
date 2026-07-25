@@ -1,0 +1,39 @@
+# Build
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# User files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS
+.vs/
+
+# Test
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Logs
+*.log
+
+# Docker
+docker-data/
+docker-volumes/
+
+# SQL Server
+*.mdf
+*.ldf
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.cache
