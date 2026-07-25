@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Inventory.Application.Interfaces;
+using Inventory.Infrastructure.Connections;
+using Inventory.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 namespace Inventory.Infrastructure;
 
 public static class DependencyInjection
@@ -9,8 +13,10 @@ public static class DependencyInjection
     {
         services.AddDbContext<InventoryDbContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            options.UseSqlServer(configuration.GetConnectionString("InventoryDb"));
         });
+        services.AddScoped<IConnection, InventoryConn>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         return services;
     }
 }
