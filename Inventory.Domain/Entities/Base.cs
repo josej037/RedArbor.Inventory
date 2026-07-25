@@ -1,11 +1,10 @@
-﻿namespace Inventory.Domain.Entities
+﻿namespace Inventory.Domain.Entities;
+
+public class Base
 {
-    public abstract class Base
-    {
-        public int Id { get; set; }
-        public bool active { get; set; }
-        public int UserId { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-    }
+    public int Id { get; set; }
+    public bool Active { get; set; } = true;
+    public int? UserId { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? UpdatedAt { get; set; }
 }
