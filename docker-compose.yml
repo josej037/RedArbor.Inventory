@@ -1,0 +1,38 @@
+services:
+  inventory.api:
+    image: ${DOCKER_REGISTRY-}inventoryapi
+    build:
+      context: .
+      dockerfile: Inventory.Api\Dockerfile
+    container_name: inventory-api
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__InventoryDb: >
+        Server=sqlserver;
+        Database=InventoryDb;
+        User Id=sa;
+        Password=Inventory@2026;
+        TrustServerCertificate=True;
+      Jwt__Key: RedArborInventoryTest202607SspTgaFsvpcK98765
+      Jwt__Issuer: Inventory.Api
+      Jwt__Audience: Inventory.Api
+      Jwt__ExpirationMinutes: 60
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: Inventory@2026
+    ports:
+      - "1433:1433"
+
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:

@@ -14,7 +14,15 @@ public static class DependencyInjection
     {
         services.AddDbContext<InventoryDbContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("InventoryDb"));
+            options.UseSqlServer(configuration.GetConnectionString("InventoryDb"),
+                sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(30),
+                        errorNumbersToAdd: null
+                        );
+                });
         });
         services.AddScoped<IConnection, InventoryConn>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
