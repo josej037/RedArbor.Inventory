@@ -1,5 +1,4 @@
 ﻿using Inventory.Application.DTOs.InventoryEntry;
-using Inventory.Domain.Entities;
 
 namespace Inventory.Application.Services.Interfaces;
 

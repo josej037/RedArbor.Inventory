@@ -1,4 +1,3 @@
-using Inventory.Application.DTOs.InventoryMovement;
 using Inventory.Application.Interfaces;
 using Inventory.Application.Services;
 using Inventory.Domain.Entities;

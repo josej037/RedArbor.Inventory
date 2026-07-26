@@ -137,6 +137,12 @@ dotnet ef migrations add InitialCreate --project Inventory.Infrastructure --star
 dotnet ef database update --project Inventory.Infrastructure --startup-project Inventory.Api
 ```
 
+## Database Diagram
+
+The following diagram shows the database schema used by the application.
+
+![Database Diagram](Docs/DiagramDB.png)
+
 ---
 
 # Initial Data
