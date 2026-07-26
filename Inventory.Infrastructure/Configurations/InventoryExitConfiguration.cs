@@ -15,7 +15,7 @@ namespace Inventory.Infrastructure.Configurations
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Client).IsRequired().HasMaxLength(150);
             builder.Property(x => x.OrderNumber).IsRequired().HasMaxLength(50);
-            builder.Ignore(x => x.DeliveredDate);
+            builder.Property(x => x.DeliveredDate);
             builder.Property(x => x.Active).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.UpdatedAt);
