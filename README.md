@@ -141,7 +141,9 @@ dotnet ef database update --project Inventory.Infrastructure --startup-project I
 
 The following diagram shows the database schema used by the application.
 
-![Database Diagram](Docs/DiagramDB.png)
+<p align="center">
+  <img src="Docs/DiagramDB.png" alt="Database Diagram" width="900"/>
+</p>
 
 ---
 
