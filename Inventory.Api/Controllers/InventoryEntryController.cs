@@ -1,12 +1,9 @@
 ﻿using Inventory.Application.DTOs.InventoryEntry;
 using Inventory.Application.Services.Interfaces;
-using Inventory.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 
 namespace Inventory.Api.Controllers;
-
 
 [ApiController]
 [Authorize]
@@ -14,13 +11,17 @@ namespace Inventory.Api.Controllers;
 public class InventoryEntryController : ControllerBase
 {
     private readonly IInventoryEntryService _service;
-
     public InventoryEntryController(IInventoryEntryService service)
     {
         _service = service;
     }
 
-
+    /// <summary>
+    /// API endpoint to retrieve all inventory entries.
+    /// </summary>
+    /// <returns>Returns the list of inventory entries</returns>
+    /// <response code="200">List of inventory entries</response>
+    /// <response code="401">Unauthorized</response>
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -28,6 +29,14 @@ public class InventoryEntryController : ControllerBase
         return Ok(entries);
     }
 
+    /// <summary>
+    /// API endpoint to retrieve an inventory entry by its ID.
+    /// </summary>
+    /// <returns>Returns the requested inventory entry</returns>
+    /// <response code="200">Inventory entry Item</response>
+    /// <response code="404">Inventory entry not found</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="500">An error occurred while getting the inventory entry</response>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -48,6 +57,13 @@ public class InventoryEntryController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// API endpoint creates a new inventory entry.
+    /// </summary>
+    /// <returns>Returns the requested inventory entry</returns>
+    /// <response code="201">Inventory entry created</response>
+    /// <response code="500">An error occurred while creating the inventory entry</response>
+    /// <response code="401">Unauthorized</response>
     [HttpPost]
     public async Task<IActionResult> Create(InventoryEntryRequest request)
     {
@@ -66,6 +82,13 @@ public class InventoryEntryController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// API endpoint to retrieve an inventory entry by its ID.
+    /// </summary>
+    /// <returns>Returns the requested inventory entry</returns>
+    /// <response code="200">Inventory entry Item</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="500">An error occurred while getting the inventory entry</response>
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, InventoryEntryRequest request)
     {
@@ -84,6 +107,13 @@ public class InventoryEntryController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// API endpoint deletes an existing inventory entry.
+    /// </summary>
+    /// <returns>Returns the requested inventory entry</returns>
+    /// <response code="200">Inventory entry deleted</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="500">An error occurred while deleting the inventory entry</response>
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

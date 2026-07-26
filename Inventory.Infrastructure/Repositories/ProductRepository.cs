@@ -16,6 +16,12 @@ public class ProductRepository : IProductRepository
     }
 
     #region Transacctions
+
+    /// <summary>
+    /// Creates a new product in the database.
+    /// </summary>
+    /// <param name="product"></param>
+    /// <returns>ID</returns>
     public async Task<int> Create(Product product)
     {
         const string sql = @"
@@ -29,6 +35,11 @@ public class ProductRepository : IProductRepository
         return await connection.ExecuteScalarAsync<int>(sql, product);
     }
 
+    /// <summary>
+    /// Deletes a product from the database.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task Delete(int id)
     {
         const string sql = @"
@@ -44,6 +55,11 @@ public class ProductRepository : IProductRepository
         });
     }
 
+    /// <summary>
+    /// Updates an existing product in the database.
+    /// </summary>
+    /// <param name="product"></param>
+    /// <returns></returns>
     public async Task Update(Product product)
     {
         const string sql = @"
@@ -61,8 +77,18 @@ public class ProductRepository : IProductRepository
     }
     #endregion
 
-    public async Task<IEnumerable<Product>> GetAll() => 
+    /// <summary>
+    /// List all products in the database.
+    /// </summary>
+    /// <returns>IEnumerable<Product></returns>
+    public async Task<IEnumerable<Product>> GetAll() =>
         await _context.Products.AsNoTracking().Where(x => x.Active).ToListAsync();
-    public async Task<Product?> GetById(int id) => 
+
+    /// <summary>
+    /// Gets a product by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Product</returns>
+    public async Task<Product?> GetById(int id) =>
        await _context.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.Active);
 }

@@ -1,5 +1,4 @@
-﻿
-namespace Inventory.Application.DTOs.InventoryEntry;
+﻿namespace Inventory.Application.DTOs.InventoryEntry;
 
 public class InventoryEntryDetailRequest
 {

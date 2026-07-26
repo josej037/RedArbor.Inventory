@@ -13,6 +13,11 @@ public class ProductService : IProductService
         _repository = repository;
     }
 
+    /// <summary>
+    /// Creates a new product.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns>ProductResponse</returns>
     public async Task<ProductResponse> Create(ProductRequest request)
     {
         var product = new Product
@@ -24,7 +29,7 @@ public class ProductService : IProductService
             CategoryId = request.CategoryId
         };
         product.Id = await _repository.Create(product);
-          
+
         return new ProductResponse
         {
             Id = product.Id,
@@ -36,6 +41,11 @@ public class ProductService : IProductService
         };
     }
 
+    /// <summary>
+    /// Delete a product.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task Delete(int id)
     {
         var product = await _repository.GetById(id);
@@ -44,6 +54,10 @@ public class ProductService : IProductService
         await _repository.Delete(id);
     }
 
+    /// <summary>
+    /// List all products.
+    /// </summary>
+    /// <returns>IEnumerable<ProductResponse></returns>
     public async Task<IEnumerable<ProductResponse>> GetAll()
     {
         var products = await _repository.GetAll();
@@ -59,6 +73,11 @@ public class ProductService : IProductService
         });
     }
 
+    /// <summary>
+    /// Get a product by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>ProductResponse</returns>
     public async Task<ProductResponse?> GetById(int id)
     {
         var product = await _repository.GetById(id);
@@ -76,6 +95,12 @@ public class ProductService : IProductService
         };
     }
 
+    /// <summary>
+    /// Updates an existing product.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public async Task Update(int id, ProductRequest request)
     {
         var product = await _repository.GetById(id);

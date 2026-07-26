@@ -7,7 +7,6 @@ public class InventoryEntryDetail : Base
     public decimal Quantity { get; set; }
     public decimal UnitCost { get; set; }
     public decimal TotalAmount { get; set; }
-
     public InventoryEntry InventoryEntry { get; set; } = default!;
     public Product Product { get; set; } = default!;
 }

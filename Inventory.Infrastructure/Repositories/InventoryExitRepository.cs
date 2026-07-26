@@ -17,6 +17,12 @@ public class InventoryExitRepository : IInventoryExitRepository
     }
 
     #region Transacctions
+
+    /// <summary>
+    /// Creates a new inventory exit in the database.
+    /// </summary>
+    /// <param name="inventoryExit"></param>
+    /// <returns>ID</returns>
     public async Task<int> Create(InventoryExit inventoryExit)
     {
         const string sql = @"
@@ -30,6 +36,11 @@ public class InventoryExitRepository : IInventoryExitRepository
         return await connection.ExecuteScalarAsync<int>(sql, inventoryExit);
     }
 
+    /// <summary>
+    /// Deletes an inventory exit from the database.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task Delete(int id)
     {
         const string sql = @"
@@ -44,6 +55,12 @@ public class InventoryExitRepository : IInventoryExitRepository
             UpdatedAt = DateTime.UtcNow
         });
     }
+
+    /// <summary>
+    /// Updates an existing inventory exit in the database.
+    /// </summary>
+    /// <param name="inventoryExit"></param>
+    /// <returns></returns>
     public async Task Update(InventoryExit inventoryExit)
     {
         const string sql = @"
@@ -59,9 +76,20 @@ public class InventoryExitRepository : IInventoryExitRepository
     }
     #endregion
 
+
+    /// <summary>
+    /// List all inventory exits in the database.
+    /// </summary>
+    /// <returns>IEnumerable<InventoryExit></returns>
     public async Task<IEnumerable<InventoryExit>> GetAll() =>
         await _context.InventoryExits.AsNoTracking().Where(x => x.Active).ToListAsync();
 
+
+    /// <summary>
+    /// Gets an inventory exit by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>InventoryExit</returns>
     public async Task<InventoryExit?> GetById(int id) =>
        await _context.InventoryExits.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.Active);
 

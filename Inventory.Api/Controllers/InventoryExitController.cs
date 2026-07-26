@@ -1,12 +1,9 @@
 ﻿using Inventory.Application.DTOs.InventoryExit;
 using Inventory.Application.Services.Interfaces;
-using Inventory.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 
 namespace Inventory.Api.Controllers;
-
 
 [ApiController]
 [Authorize]
@@ -20,7 +17,12 @@ public class InventoryExitController : ControllerBase
         _service = service;
     }
 
-
+    /// <summary>
+    /// API endpoint to retrieve all inventory exits.
+    /// </summary>
+    /// <returns>Returns the list of inventory exits</returns>
+    /// <response code="200">List of inventory exits</response>
+    /// <response code="401">Unauthorized</response>
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -28,6 +30,14 @@ public class InventoryExitController : ControllerBase
         return Ok(exits);
     }
 
+    /// <summary>
+    /// API endpoint to retrieve an inventory exit by its ID.
+    /// </summary>
+    /// <returns>Returns the requested inventory exit</returns>
+    /// <response code="200">Inventory exit Item</response>
+    /// <response code="404">Inventory exit not found</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="500">An error occurred while getting the inventory exit</response>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -48,6 +58,13 @@ public class InventoryExitController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// API endpoint creates a new inventory exit.
+    /// </summary>
+    /// <returns>Returns the requested inventory exit</returns>
+    /// <response code="201">Inventory exit created</response>
+    /// <response code="500">An error occurred while creating the inventory exit</response>
+    /// <response code="401">Unauthorized</response>
     [HttpPost]
     public async Task<IActionResult> Create(InventoryExitRequest request)
     {
@@ -66,6 +83,13 @@ public class InventoryExitController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// API endpoint to retrieve an inventory exit by its ID.
+    /// </summary>
+    /// <returns>Returns the requested inventory exit</returns>
+    /// <response code="200">Inventory exit Item</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="500">An error occurred while getting the inventory exit</response>
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, InventoryExitRequest request)
     {
@@ -84,6 +108,13 @@ public class InventoryExitController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// API endpoint deletes an existing inventory exit.
+    /// </summary>
+    /// <returns>Returns the requested inventory exit</returns>
+    /// <response code="200">Inventory exit deleted</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="500">An error occurred while deleting the inventory exit</response>
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

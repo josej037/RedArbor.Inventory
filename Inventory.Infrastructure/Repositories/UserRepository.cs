@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Infrastructure.Repositories;
 
-internal class UserRepository : IUserRepository
+public class UserRepository : IUserRepository
 {
     private readonly InventoryDbContext _context;
     private readonly IConnection _connection;
@@ -14,6 +14,12 @@ internal class UserRepository : IUserRepository
         _context = context;
         _connection = connection;
     }
+
+    /// <summary>
+    /// Verifies the user's by username.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns>User</returns>
     public async Task<User?> Login(string username) =>
         await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Username == username && x.Active);
 }

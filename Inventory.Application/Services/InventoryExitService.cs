@@ -20,6 +20,10 @@ public class InventoryExitService : IInventoryExitService
         _movementRepo = movementRepo;
     }
 
+    /// <summary>
+    /// List all inventory exits.
+    /// </summary>
+    /// <returns>IEnumerable<InventoryExitResponse></returns>
     public async Task<IEnumerable<InventoryExitResponse>> GetAll()
     {
         var exits = await _exitRepo.GetAll();
@@ -32,6 +36,11 @@ public class InventoryExitService : IInventoryExitService
         });
     }
 
+    /// <summary>
+    /// Get an inventory exit by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>InventoryExitResponse</returns>
     public async Task<InventoryExitResponse?> GetById(int id)
     {
         var exit = await _exitRepo.GetById(id);
@@ -47,6 +56,11 @@ public class InventoryExitService : IInventoryExitService
         };
     }
 
+    /// <summary>
+    /// Creates a new inventory exit.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns>InventoryExitResponse</returns>
     public async Task<InventoryExitResponse> Create(InventoryExitRequest request)
     {
         var exit = new InventoryExit
@@ -101,6 +115,12 @@ public class InventoryExitService : IInventoryExitService
         };
     }
 
+    /// <summary>
+    /// Updates an existing inventory exit.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public async Task Update(int id, InventoryExitRequest request)
     {
         var exit = await _exitRepo.GetById(id);
@@ -113,6 +133,11 @@ public class InventoryExitService : IInventoryExitService
         await _exitRepo.Update(exit);
     }
 
+    /// <summary>
+    /// Delete an inventory exit.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task Delete(int id)
     {
         var exit = await _exitRepo.GetById(id);

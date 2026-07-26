@@ -3,6 +3,7 @@ using Inventory.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
+
 namespace Inventory.Api.Controllers;
 
 [ApiController]
@@ -17,19 +18,28 @@ public class ProductController : ControllerBase
         _product = product;
     }
 
+    /// <summary>
+    /// API endpoint to retrieve all products.
+    /// </summary>
+    /// <returns>Returns the list of products</returns>
+    /// <response code="200">List of products</response>
+    /// <response code="401">Unauthorized</response>
     [HttpGet]
-    [Description("Get all products")]
-    /// <response code="200">Returns the list of products</response>
     public async Task<IActionResult> GetAll()
     {
         var products = await _product.GetAll();
         return Ok(products);
     }
 
-    [HttpGet("{id}")]
-    [Description("Get a product by its ID")]
-    /// <response code="200">Returns the requested product</response>
+    /// <summary>
+    /// API endpoint to retrieve a product by its ID.
+    /// </summary>
+    /// <returns>Returns the requested product</returns>
+    /// <response code="200">Product Item</response>
     /// <response code="404">Product not found</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="500">An error occurred while getting the product</response>
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         try
@@ -49,6 +59,13 @@ public class ProductController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// API endpoint creates a new product.
+    /// </summary>
+    /// <returns>Returns the requested product</returns>
+    /// <response code="201">Product created</response>
+    /// <response code="500">An error occurred while creating the product</response>
+    /// <response code="401">Unauthorized</response>
     [HttpPost]
     public async Task<IActionResult> Create(ProductRequest request)
     {
@@ -67,6 +84,13 @@ public class ProductController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// API endpoint updates an existing product.
+    /// </summary>
+    /// <returns>Returns the requested product</returns>
+    /// <response code="200">Product updated</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="500">An error occurred while updating the product</response>
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, ProductRequest request)
     {
@@ -85,6 +109,13 @@ public class ProductController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// API endpoint deletes an existing product.
+    /// </summary>
+    /// <returns>Returns the requested product</returns>
+    /// <response code="200">Product deleted</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="500">An error occurred while deleting the product</response>
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -102,5 +133,4 @@ public class ProductController : ControllerBase
             });
         }
     }
-
 }

@@ -13,6 +13,11 @@ public class CategoryService : ICategoryService
         _repository = repository;
     }
 
+    /// <summary>
+    /// Creates a new category.
+    /// </summary>
+    /// <param name="category"></param>
+    /// <returns>CategoryResponse</returns>
     public async Task<CategoryResponse> Create(CategoryRequest request)
     {
         var category = new Category
@@ -20,9 +25,8 @@ public class CategoryService : ICategoryService
             Name = request.Name,
             Description = request.Description,
         };
-
         category.Id = await _repository.Create(category);
-          
+
         return new CategoryResponse
         {
             Id = category.Id,
@@ -32,6 +36,11 @@ public class CategoryService : ICategoryService
         };
     }
 
+    /// <summary>
+    /// Delete a category.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task Delete(int id)
     {
         var category = await _repository.GetById(id);
@@ -40,6 +49,10 @@ public class CategoryService : ICategoryService
         await _repository.Delete(id);
     }
 
+    /// <summary>
+    /// List all categories.
+    /// </summary>
+    /// <returns>IEnumerable<CategoryResponse></returns>
     public async Task<IEnumerable<CategoryResponse>> GetAll()
     {
         var categories = await _repository.GetAll();
@@ -52,6 +65,11 @@ public class CategoryService : ICategoryService
         });
     }
 
+    /// <summary>
+    /// Get a category by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>CategoryResponse</returns>
     public async Task<CategoryResponse?> GetById(int id)
     {
         var category = await _repository.GetById(id);
@@ -66,6 +84,12 @@ public class CategoryService : ICategoryService
         };
     }
 
+    /// <summary>
+    /// Updates an existing category.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public async Task Update(int id, CategoryRequest request)
     {
         var category = await _repository.GetById(id);
@@ -74,7 +98,6 @@ public class CategoryService : ICategoryService
         category.Name = request.Name;
         category.Description = request.Description;
         category.UpdatedAt = DateTime.UtcNow;
-
         await _repository.Update(category);
     }
 }

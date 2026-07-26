@@ -20,6 +20,10 @@ public class InventoryEntryService : IInventoryEntryService
         _movementRepo = movementRepo;
     }
 
+    /// <summary>
+    /// List all inventory entries.
+    /// </summary>
+    /// <returns>IEnumerable<InventoryEntryResponse></returns>
     public async Task<IEnumerable<InventoryEntryResponse>> GetAll()
     {
         var entries = await _entryRepo.GetAll();
@@ -32,6 +36,11 @@ public class InventoryEntryService : IInventoryEntryService
         });
     }
 
+    /// <summary>
+    /// Get an inventory entry by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>InventoryEntryResponse</returns>
     public async Task<InventoryEntryResponse?> GetById(int id)
     {
         var entry = await _entryRepo.GetById(id);
@@ -47,6 +56,11 @@ public class InventoryEntryService : IInventoryEntryService
         };
     }
 
+    /// <summary>
+    /// Creates a new inventory entry.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns>InventoryEntryResponse</returns>
     public async Task<InventoryEntryResponse> Create(InventoryEntryRequest request)
     {
         var entry = new InventoryEntry
@@ -101,6 +115,12 @@ public class InventoryEntryService : IInventoryEntryService
         };
     }
 
+    /// <summary>
+    /// Updates an existing inventory entry.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
     public async Task Update(int id, InventoryEntryRequest request)
     {
         var entry = await _entryRepo.GetById(id);
@@ -113,6 +133,11 @@ public class InventoryEntryService : IInventoryEntryService
         await _entryRepo.Update(entry);
     }
 
+    /// <summary>
+    /// Delete an inventory entry.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task Delete(int id)
     {
         var entry = await _entryRepo.GetById(id);

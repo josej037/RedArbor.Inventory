@@ -1,12 +1,13 @@
 ﻿using Inventory.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Inventory.Application.Interfaces
+namespace Inventory.Application.Interfaces;
+
+public interface IUserRepository
 {
-    public interface IUserRepository
-    {
-        Task<User?> Login(string username);
-    }
+    /// <summary>
+    /// Verifies the user's credentials and returns a JWT token if valid.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns>User</returns>
+    Task<User?> Login(string username);
 }

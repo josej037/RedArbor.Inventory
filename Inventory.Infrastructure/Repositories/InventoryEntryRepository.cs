@@ -17,6 +17,12 @@ public class InventoryEntryRepository : IInventoryEntryRepository
     }
 
     #region Transacctions
+
+    /// <summary>
+    /// Creates a new inventory entry in the database.
+    /// </summary>
+    /// <param name="inventoryEntry"></param>
+    /// <returns>ID</returns>
     public async Task<int> Create(InventoryEntry inventoryEntry)
     {
         const string sql = @"
@@ -30,6 +36,11 @@ public class InventoryEntryRepository : IInventoryEntryRepository
         return await connection.ExecuteScalarAsync<int>(sql, inventoryEntry);
     }
 
+    /// <summary>
+    /// Deletes an inventory entry from the database.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task Delete(int id)
     {
         const string sql = @"
@@ -44,6 +55,12 @@ public class InventoryEntryRepository : IInventoryEntryRepository
             UpdatedAt = DateTime.UtcNow
         });
     }
+
+    /// <summary>
+    /// Updates an existing inventory entry in the database.
+    /// </summary>
+    /// <param name="inventoryEntry"></param>
+    /// <returns></returns>
     public async Task Update(InventoryEntry inventoryEntry)
     {
         const string sql = @"
@@ -59,10 +76,18 @@ public class InventoryEntryRepository : IInventoryEntryRepository
     }
     #endregion
 
+    /// <summary>
+    /// List all inventory entries in the database.
+    /// </summary>
+    /// <returns>IEnumerable<InventoryEntry></returns>
     public async Task<IEnumerable<InventoryEntry>> GetAll() =>
         await _context.InventoryEntries.AsNoTracking().Where(x => x.Active).ToListAsync();
 
+    /// <summary>
+    /// Gets an inventory entry by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>InventoryEntry</returns>
     public async Task<InventoryEntry?> GetById(int id) =>
        await _context.InventoryEntries.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.Active);
-
 }

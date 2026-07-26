@@ -1,5 +1,4 @@
-﻿
-namespace Inventory.Application.DTOs.Auth;
+﻿namespace Inventory.Application.DTOs.Auth;
 
 public class LoginResponse
 {

@@ -6,5 +6,4 @@ public class InventoryEntryRequest
     public string InvoiceNumber { get; set; } = string.Empty;
     public DateTime ReceivedDate { get; set; }
     public List<InventoryEntryDetailRequest> Details { get; set; } = new();
-
 }

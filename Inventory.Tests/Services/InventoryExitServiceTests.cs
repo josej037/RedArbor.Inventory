@@ -9,7 +9,7 @@ namespace Inventory.Tests;
 public class InventoryExitServiceTests
 {
     private readonly Mock<IInventoryExitRepository> _exitRepositoryMock;
-    private readonly Mock<IInventoryExitDetailRepository    > _detailRepositoryMock;
+    private readonly Mock<IInventoryExitDetailRepository> _detailRepositoryMock;
     private readonly Mock<IProductRepository> _productRepositoryMock;
     private readonly Mock<IInventoryMovementRepository> _movementRepositoryMock;
 
@@ -18,7 +18,7 @@ public class InventoryExitServiceTests
     public InventoryExitServiceTests()
     {
         _exitRepositoryMock = new Mock<IInventoryExitRepository>();
-        _detailRepositoryMock = new Mock<IInventoryExitDetailRepository    >();
+        _detailRepositoryMock = new Mock<IInventoryExitDetailRepository>();
         _productRepositoryMock = new Mock<IProductRepository>();
         _movementRepositoryMock = new Mock<IInventoryMovementRepository>();
         _service = new InventoryExitService(
@@ -91,7 +91,7 @@ public class InventoryExitServiceTests
                         UnitCost = 100.00m
                     }
                 }
-            };
+        };
 
         var product = new Product
         {

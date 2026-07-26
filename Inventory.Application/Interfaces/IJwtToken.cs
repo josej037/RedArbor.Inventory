@@ -1,12 +1,13 @@
 ﻿using Inventory.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Inventory.Application.Interfaces
+namespace Inventory.Application.Interfaces;
+
+public interface IJwtToken
 {
-    public interface IJwtToken
-    {
-        string Generate(User user);
-    }
+    /// <summary>
+    /// Generates a JWT token for the specified user.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns>JWT token</returns>
+    string Generate(User user);
 }

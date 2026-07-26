@@ -32,9 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IInventoryExitRepository, InventoryExitRepository>();
         services.AddScoped<IInventoryExitDetailRepository, InventoryExitDetailRepository>();
         services.AddScoped<IInventoryMovementRepository, InventoryMovementRepository>();
-
         services.AddScoped<IUserRepository, UserRepository>();
-
         services.AddScoped<IJwtToken, JwtToken>();
         return services;
     }

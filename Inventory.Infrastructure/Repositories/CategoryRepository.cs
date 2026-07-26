@@ -17,6 +17,12 @@ public class CategoryRepository : ICategoryRepository
     }
 
     #region Transacctions
+
+    /// <summary>
+    /// Creates a new category in the database.
+    /// </summary>
+    /// <param name="category"></param>
+    /// <returns>ID</returns>
     public async Task<int> Create(Category category)
     {
         const string sql = @"
@@ -30,6 +36,11 @@ public class CategoryRepository : ICategoryRepository
         return await connection.ExecuteScalarAsync<int>(sql, category);
     }
 
+    /// <summary>
+    /// Deletes a category from the database.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task Delete(int id)
     {
         const string sql = @"
@@ -45,6 +56,11 @@ public class CategoryRepository : ICategoryRepository
         });
     }
 
+    /// <summary>
+    /// Updates an existing category in the database.
+    /// </summary>
+    /// <param name="category"></param>
+    /// <returns></returns>
     public async Task Update(Category category)
     {
         const string sql = @"
@@ -59,8 +75,18 @@ public class CategoryRepository : ICategoryRepository
     }
     #endregion
 
-    public async Task<IEnumerable<Category>> GetAll() => 
+    /// <summary>
+    /// List all categories in the database.
+    /// </summary>
+    /// <returns>IEnumerable<Category></returns>
+    public async Task<IEnumerable<Category>> GetAll() =>
         await _context.Categories.AsNoTracking().Where(x => x.Active).ToListAsync();
-    public async Task<Category?> GetById(int id) => 
-       await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.Active);
+
+    /// <summary>
+    /// Gets a category by its ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Category</returns>
+    public async Task<Category?> GetById(int id) =>
+    await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.Active);
 }
