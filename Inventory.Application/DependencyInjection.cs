@@ -11,6 +11,8 @@ public static class DependencyInjection
         // Register application services here
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IInventoryEntryService, InventoryEntryService>();
+
         return services;
     }
 }
