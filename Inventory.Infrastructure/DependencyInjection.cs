@@ -1,5 +1,6 @@
 ﻿using Inventory.Application.Interfaces;
 using Inventory.Infrastructure.Connections;
+using Inventory.Infrastructure.jwt;
 using Inventory.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,10 @@ public static class DependencyInjection
         services.AddScoped<IInventoryExitRepository, InventoryExitRepository>();
         services.AddScoped<IInventoryExitDetailRepository, InventoryExitDetailRepository>();
         services.AddScoped<IInventoryMovementRepository, InventoryMovementRepository>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddScoped<IJwtToken, JwtToken>();
         return services;
     }
 }

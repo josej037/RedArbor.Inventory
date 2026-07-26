@@ -1,11 +1,13 @@
 ﻿using Inventory.Application.DTOs.Category;
 using Inventory.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
 namespace Inventory.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]"), Description("Manage categories")]
 public class CategoryController : ControllerBase
 {

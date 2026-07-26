@@ -1,4 +1,5 @@
 ﻿
+using Inventory.Application.Interfaces;
 using Inventory.Application.Services;
 using Inventory.Application.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,9 @@ public static class DependencyInjection
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IInventoryEntryService, InventoryEntryService>();
         services.AddScoped<IInventoryExitService, InventoryExitService>();
+
+
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }

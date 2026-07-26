@@ -1,10 +1,12 @@
 ﻿using Inventory.Application.DTOs.Product;
 using Inventory.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 namespace Inventory.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]"), Description("Manage products")]
 public class ProductController : ControllerBase
 {

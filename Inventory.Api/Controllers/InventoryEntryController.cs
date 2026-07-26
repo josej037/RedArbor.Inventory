@@ -1,6 +1,7 @@
 ﻿using Inventory.Application.DTOs.InventoryEntry;
 using Inventory.Application.Services.Interfaces;
 using Inventory.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
@@ -8,6 +9,7 @@ namespace Inventory.Api.Controllers;
 
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class InventoryEntryController : ControllerBase
 {
