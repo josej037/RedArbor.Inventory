@@ -37,3 +37,5 @@ docker-volumes/
 *.bak
 *.swp
 *.cache
+
+.env
