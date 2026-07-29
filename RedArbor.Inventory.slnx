@@ -9,6 +9,7 @@
     <Project Path="Inventory.Application/Inventory.Application.csproj" />
     <Project Path="Inventory.Domain/Inventory.Domain.csproj" />
     <Project Path="Inventory.Infrastructure/Inventory.Infrastructure.csproj" />
+    <Project Path="Inventory.Web/Inventory.Web.csproj" Id="6a11bc47-b6fb-431e-8d7c-bba8ce377709" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="Inventory.Tests/Inventory.Tests.csproj" />

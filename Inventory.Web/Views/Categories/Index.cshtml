@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Inventory.Web.Models.Categories.CategoryDto>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>
+            Categories
+        </h3>
+        <button class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#createModal">
+            <i class="bi bi-plus-circle"></i>
+            Nuevo
+        </button>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th style="width:80px;">Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th style="width:180px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>
+
+                        @if (item.Active)
+                        {
+                            <span class="badge bg-success">
+                                Active
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                Inactive
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary btn-edit"
+                                data-id="@item.Id">
+                            Editar
+                        </button>
+                        <button class="btn btn-sm btn-outline-info btn-view"
+                                data-id="@item.Id">
+                            Ver
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger btn-delete"
+                                data-id="@item.Id">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<partial name="_CreateModal" />
+<partial name="_EditModal" />
+<partial name="_DetailModal" />
+@section Scripts {
+    <script src="~/js/categories.js"></script>
+}

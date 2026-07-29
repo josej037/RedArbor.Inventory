@@ -1,11 +1,16 @@
-﻿using Inventory.Application.Categories.Commands.CreateCategory;
+﻿using Inventory.Application.Auth.DTOs;
+using Inventory.Application.Categories.Commands.CreateCategory;
 using Inventory.Application.Categories.Commands.DeleteCategory;
 using Inventory.Application.Categories.Commands.UpdateCategory;
+using Inventory.Application.Categories.DTOs;
 using Inventory.Application.Categories.Queries.GetCategories;
 using Inventory.Application.Categories.Queries.GetCategoryById;
+using Inventory.Application.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Inventory.Api.Controllers;
 
@@ -31,7 +36,8 @@ public class CategoryController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var categories = await _category.Send(new GetCategoriesQuery());
-        return Ok(categories);
+        return Ok(Result<List<CategoryDto>>.Success(categories.Value!));
+
     }
 
     /// <summary>
@@ -52,7 +58,9 @@ public class CategoryController : ControllerBase
         if (category is null)
             return NotFound();
 
-        return Ok(category);
+        //return Ok(category);
+        return Ok(Result<CategoryDto>.Success(category.Value!));
+
     }
 
     /// <summary>
@@ -70,7 +78,7 @@ public class CategoryController : ControllerBase
         if (!result.IsSuccess)
             return BadRequest(result.Error);
 
-        return Ok(result.Value);
+        return Ok(Result<int>.Success(result.Value));
     }
 
     /// <summary>
@@ -87,7 +95,7 @@ public class CategoryController : ControllerBase
         if (!result.IsSuccess)
             return BadRequest(result.Error);
 
-        return Ok(result.Value);
+        return Ok(Result<bool>.Success(result.Value));
     }
 
     /// <summary>
@@ -104,6 +112,6 @@ public class CategoryController : ControllerBase
         if (!result.IsSuccess)
             return BadRequest(result.Error);
 
-        return Ok(result.Value);
+        return Ok(Result<bool>.Success(result.Value));
     }
 }

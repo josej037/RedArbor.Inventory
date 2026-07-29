@@ -16,6 +16,15 @@ services:
       Jwt__ExpirationMinutes: ${JWT_EXPIRATION_MINUTES:-60}
     depends_on:
       - sqlserver
+  inventory.web:
+    build:
+      context: .
+      dockerfile: Inventory.Web/Dockerfile
+    container_name: inventory-web
+    ports:
+      - "5000:8080"
+    depends_on:
+      - inventory.api
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest

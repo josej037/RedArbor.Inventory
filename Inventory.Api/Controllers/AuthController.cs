@@ -1,8 +1,10 @@
 ﻿using Inventory.Application.Auth.DTOs;
 using Inventory.Application.Auth.Queries.GetLogin;
+using Inventory.Application.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Inventory.Api.Controllers;
 
@@ -33,9 +35,6 @@ public class AuthController : ControllerBase
 
         if (!result.IsSuccess)
             return Unauthorized(result.Error);
-
-        return Ok(result.Value);
-
-
+        return Ok(Result<TokenDto>.Success(result.Value!));
     }
 }
