@@ -7,12 +7,10 @@ namespace Inventory.Application.InventoryEntries.Commands.DeleteInventoryEntry;
 public class DeleteInventoryEntryCommandHandler : IRequestHandler<DeleteInventoryEntryCommand, Result<bool>>
 {
     private readonly IInventoryEntryRepository _repository;
-
     public DeleteInventoryEntryCommandHandler(IInventoryEntryRepository repository)
     {
         _repository = repository;
     }
-
     public async Task<Result<bool>> Handle(DeleteInventoryEntryCommand request, CancellationToken cancellationToken)
     {
         var inventoryEntry = await _repository.GetById(request.Id);

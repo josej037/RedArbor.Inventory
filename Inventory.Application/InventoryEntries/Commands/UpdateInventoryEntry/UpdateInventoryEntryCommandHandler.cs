@@ -7,7 +7,6 @@ namespace Inventory.Application.InventoryEntries.Commands.UpdateInventoryEntry;
 public sealed class UpdateInventoryEntryCommandHandler : IRequestHandler<UpdateInventoryEntryCommand, Result<bool>>
 {
     private readonly IInventoryEntryRepository _repository;
-
     private readonly IInventoryEntryDetailRepository _repositoryDetail;
 
     public UpdateInventoryEntryCommandHandler(IInventoryEntryRepository repository, IInventoryEntryDetailRepository repositoryDetail)
@@ -31,7 +30,6 @@ public sealed class UpdateInventoryEntryCommandHandler : IRequestHandler<UpdateI
         inventoryEntry.ReceivedDate = request.Request.ReceivedDate;
         inventoryEntry.UpdatedAt = DateTime.UtcNow;
         await _repository.Update(inventoryEntry);
-
         await _repositoryDetail.Create(
             request.Request.Details!.Select(d => new Domain.Entities.InventoryEntryDetail
             {

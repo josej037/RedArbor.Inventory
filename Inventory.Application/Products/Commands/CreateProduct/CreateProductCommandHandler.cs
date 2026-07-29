@@ -11,7 +11,6 @@ public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductC
     {
         _repository = repository;
     }
-
     public async Task<Result<int>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         var product = new Domain.Entities.Product

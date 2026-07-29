@@ -16,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Auth\Queries\GetLogin\GetLoginRequest.cs" />
+    <Compile Remove="Auth\Queries\GetLogin\GetLoginResponse.cs" />
     <Compile Remove="InventoryEntries\Commands\CreateInventoryEntry\CreateInventoryEntryDetailRequest.cs" />
     <Compile Remove="InventoryEntries\Commands\CreateInventoryEntry\CreateInventoryEntryRequest.cs" />
     <Compile Remove="InventoryEntries\Commands\UpdateInventoryEntry\UpdateInventoryEntryDetailRequest.cs" />

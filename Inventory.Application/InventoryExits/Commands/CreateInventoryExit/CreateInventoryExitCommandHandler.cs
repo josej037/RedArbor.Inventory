@@ -3,7 +3,6 @@ using Inventory.Application.Results;
 using MediatR;
 
 namespace Inventory.Application.InventoryExits.Commands.CreateInventoryExit;
-
 public sealed class CreateInventoryExitCommandHandler : IRequestHandler<CreateInventoryExitCommand, Result<int>>
 {
     private readonly IInventoryExitRepository _repository;

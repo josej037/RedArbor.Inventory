@@ -7,7 +7,6 @@ namespace Inventory.Application.Products.Commands.DeleteProduct;
 public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Result<bool>>
 {
     private readonly IProductRepository _repository;
-
     public DeleteProductCommandHandler(IProductRepository repository)
     {
         _repository = repository;

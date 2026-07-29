@@ -1,5 +1,4 @@
 ﻿namespace Inventory.Application.InventoryMovements.DTOs;
-
 public sealed record InventoryMovementDto(
 int ProductId,
   int MovementType,
@@ -7,5 +6,4 @@ int ProductId,
   decimal Quantity,
   decimal StockBefore,
   decimal StockAfter
-//ProductDto Product  
 );

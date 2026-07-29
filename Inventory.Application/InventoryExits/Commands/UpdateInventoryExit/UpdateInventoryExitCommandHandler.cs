@@ -7,7 +7,6 @@ namespace Inventory.Application.InventoryExits.Commands.UpdateInventoryExit;
 public sealed class UpdateInventoryExitCommandHandler : IRequestHandler<UpdateInventoryExitCommand, Result<bool>>
 {
     private readonly IInventoryExitRepository _repository;
-
     private readonly IInventoryExitDetailRepository _repositoryDetail;
 
     public UpdateInventoryExitCommandHandler(IInventoryExitRepository repository, IInventoryExitDetailRepository repositoryDetail)
@@ -15,7 +14,6 @@ public sealed class UpdateInventoryExitCommandHandler : IRequestHandler<UpdateIn
         _repository = repository;
         _repositoryDetail = repositoryDetail;
     }
-
     public async Task<Result<bool>> Handle(UpdateInventoryExitCommand request, CancellationToken cancellationToken)
     {
         var inventoryExit = await _repository.GetById(request.Id);

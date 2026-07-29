@@ -7,12 +7,10 @@ namespace Inventory.Application.Products.Commands.UpdateProduct;
 public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<bool>>
 {
     private readonly IProductRepository _repository;
-
     public UpdateProductCommandHandler(IProductRepository repository)
     {
         _repository = repository;
     }
-
     public async Task<Result<bool>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
         var product = await _repository.GetById(request.Id);

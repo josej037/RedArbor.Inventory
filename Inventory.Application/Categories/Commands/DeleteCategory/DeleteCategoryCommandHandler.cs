@@ -3,11 +3,9 @@ using Inventory.Application.Results;
 using MediatR;
 
 namespace Inventory.Application.Categories.Commands.DeleteCategory;
-
 public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryCommand, Result<bool>>
 {
     private readonly ICategoryRepository _repository;
-
     public DeleteCategoryCommandHandler(ICategoryRepository repository)
     {
         _repository = repository;
@@ -23,7 +21,6 @@ public class DeleteCategoryCommandHandler : IRequestHandler<DeleteCategoryComman
                     "Category.NotFound",
                     "The specified category does not exist."));
         }
-
         await _repository.Delete(request.Id);
         return Result<bool>.Success(true);
     }

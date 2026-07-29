@@ -30,8 +30,6 @@ public sealed class CreateInventoryEntryCommandHandler : IRequestHandler<CreateI
             }).ToList()
         };
         var result = await _repository.Create(inventoryEntry);
-
-
         await _repositoryDetail.Create(
             request.InventoryEntry.Details.Select(d => new Domain.Entities.InventoryEntryDetail
             {
@@ -40,9 +38,6 @@ public sealed class CreateInventoryEntryCommandHandler : IRequestHandler<CreateI
                 Quantity = d.Quantity,
                 UnitCost = d.UnitCost
             }));
-
-
-
         return Result<int>.Success(result);
     }
 }

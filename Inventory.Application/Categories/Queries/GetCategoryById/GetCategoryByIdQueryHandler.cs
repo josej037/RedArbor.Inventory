@@ -4,7 +4,6 @@ using Inventory.Application.Results;
 using MediatR;
 
 namespace Inventory.Application.Categories.Queries.GetCategoryById;
-
 public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, Result<CategoryDto?>>
 {
     private readonly ICategoryRepository _repository;

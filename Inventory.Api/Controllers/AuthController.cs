@@ -1,4 +1,5 @@
-﻿using Inventory.Application.Auth.Queries.GetLogin;
+﻿using Inventory.Application.Auth.DTOs;
+using Inventory.Application.Auth.Queries.GetLogin;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@ public class AuthController : ControllerBase
     /// <response code="401">Invalid credentials</response>   
     /// <response code="500">An error occurred while logging in.</response>   
     [HttpPost]
-    public async Task<IActionResult> Login(GetLoginRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Login(LoginDto request, CancellationToken cancellationToken)
     {
         var result = await _auth.Send(new GetLoginQuery(request), cancellationToken);
 

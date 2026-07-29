@@ -3,7 +3,6 @@ using Inventory.Application.Results;
 using MediatR;
 
 namespace Inventory.Application.Categories.Commands.CreateCategory;
-
 public sealed class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Result<int>>
 {
     private readonly ICategoryRepository _repository;
@@ -11,7 +10,6 @@ public sealed class CreateCategoryCommandHandler : IRequestHandler<CreateCategor
     {
         _repository = repository;
     }
-
     public async Task<Result<int>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = new Domain.Entities.Category

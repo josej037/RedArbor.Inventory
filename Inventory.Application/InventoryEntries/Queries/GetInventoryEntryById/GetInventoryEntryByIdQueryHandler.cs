@@ -4,7 +4,6 @@ using Inventory.Application.Results;
 using MediatR;
 
 namespace Inventory.Application.InventoryEntries.Queries.GetInventoryEntryById;
-
 public class GetInventoryEntryByIdQueryHandler : IRequestHandler<GetInventoryEntryByIdQuery, Result<InventoryEntryDto?>>
 {
     private readonly IInventoryEntryRepository _repository;

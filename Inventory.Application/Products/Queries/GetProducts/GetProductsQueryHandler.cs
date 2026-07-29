@@ -22,5 +22,4 @@ public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, Result<
 
         return Result<List<ProductDto>>.Success(list);
     }
-
 }
