@@ -23,6 +23,8 @@ services:
     container_name: inventory-web
     ports:
       - "5000:8080"
+    environment:
+      - Api__BaseUrl=http://inventory-api:8080/api/
     depends_on:
       - inventory.api
 

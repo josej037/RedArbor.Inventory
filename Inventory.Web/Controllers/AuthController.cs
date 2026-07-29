@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Security.Claims;
 
 namespace Inventory.Web.Controllers;
-
 public class AuthController : Controller
 {
     private readonly IAuthApiService _authApiService;
@@ -38,8 +36,6 @@ public class AuthController : Controller
             {
                 ModelState.AddModelError(string.Empty, response.Message!.Message);
             }
-
-            //TempData["Errors"] = response.Errors;
             return View(request);
         }
             

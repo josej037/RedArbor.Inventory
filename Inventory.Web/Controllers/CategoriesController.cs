@@ -13,7 +13,6 @@ public class CategoriesController : Controller
     {
         _service = service;
     }
-
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -22,7 +21,6 @@ public class CategoriesController : Controller
         {
             return View(Enumerable.Empty<CategoryDto?>());
         }
-
         return View(response.Data);
     }
 }
