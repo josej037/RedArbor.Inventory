@@ -1,5 +1,10 @@
-﻿using Inventory.Application.DTOs.InventoryExit;
-using Inventory.Application.Services.Interfaces;
+﻿using Inventory.Application.InventoryExits.Commands.CreateInventoryExit;
+using Inventory.Application.InventoryExits.Commands.DeleteInventoryExit;
+using Inventory.Application.InventoryExits.Commands.UpdateInventoryExit;
+using Inventory.Application.InventoryExits.DTOs;
+using Inventory.Application.InventoryExits.Queries.GetInventoryExitById;
+using Inventory.Application.InventoryExits.Queries.GetInventoryExits;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +15,9 @@ namespace Inventory.Api.Controllers;
 [Route("api/[controller]")]
 public class InventoryExitController : ControllerBase
 {
-    private readonly IInventoryExitService _service;
+    private readonly IMediator _service;
 
-    public InventoryExitController(IInventoryExitService service)
+    public InventoryExitController(IMediator service)
     {
         _service = service;
     }
@@ -26,8 +31,11 @@ public class InventoryExitController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var exits = await _service.GetAll();
-        return Ok(exits);
+        var result = await _service.Send(new GetInventoryExitsQuery());
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -39,23 +47,12 @@ public class InventoryExitController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while getting the inventory exit</response>
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
-        try
-        {
-            var exit = await _service.GetById(id);
-            if (exit == null)
-                return NotFound(new { message = "Inventory exit not found" });
-            return Ok(exit);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while getting the inventory exit.",
-                error = ex.Message
-            });
-        }
+        var result = await _service.Send(new GetInventoryExitByIdQuery(id), cancellationToken);
+        if (result.Value == null)
+            return NotFound(new { message = "Inventory exit not found" });
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -66,21 +63,13 @@ public class InventoryExitController : ControllerBase
     /// <response code="500">An error occurred while creating the inventory exit</response>
     /// <response code="401">Unauthorized</response>
     [HttpPost]
-    public async Task<IActionResult> Create(InventoryExitRequest request)
+    public async Task<IActionResult> Create(InventoryExitDto request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var exit = await _service.Create(request);
-            return StatusCode(201, exit);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while creating the inventory exit.",
-                error = ex.Message
-            });
-        }
+        var result = await _service.Send(new CreateInventoryExitCommand(request), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -91,21 +80,13 @@ public class InventoryExitController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while getting the inventory exit</response>
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, InventoryExitRequest request)
+    public async Task<IActionResult> Update(int id, InventoryExitDto request, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _service.Update(id, request);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while updating the inventory exit.",
-                error = ex.Message
-            });
-        }
+        var result = await _service.Send(new UpdateInventoryExitCommand(id, request), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -116,21 +97,13 @@ public class InventoryExitController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while deleting the inventory exit</response>
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _service.Delete(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while deleting the inventory exit.",
-                error = ex.Message
-            });
-        }
+        var result = await _service.Send(new DeleteInventoryExitCommand(id), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
 }

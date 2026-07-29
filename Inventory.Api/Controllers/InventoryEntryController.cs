@@ -1,5 +1,10 @@
-﻿using Inventory.Application.DTOs.InventoryEntry;
-using Inventory.Application.Services.Interfaces;
+﻿using Inventory.Application.InventoryEntries.Commands.CreateInventoryEntry;
+using Inventory.Application.InventoryEntries.Commands.DeleteInventoryEntry;
+using Inventory.Application.InventoryEntries.Commands.UpdateInventoryEntry;
+using Inventory.Application.InventoryEntries.DTOs;
+using Inventory.Application.InventoryEntries.Queries.GetInventoryEntries;
+using Inventory.Application.InventoryEntries.Queries.GetInventoryEntryById;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +15,10 @@ namespace Inventory.Api.Controllers;
 [Route("api/[controller]")]
 public class InventoryEntryController : ControllerBase
 {
-    private readonly IInventoryEntryService _service;
-    public InventoryEntryController(IInventoryEntryService service)
+    private readonly IMediator _service;
+    public InventoryEntryController(IMediator inventoryEntry)
     {
-        _service = service;
+        _service = inventoryEntry;
     }
 
     /// <summary>
@@ -25,8 +30,11 @@ public class InventoryEntryController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var entries = await _service.GetAll();
-        return Ok(entries);
+        var result = await _service.Send(new GetInventoryEntriesQuery());
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -38,23 +46,12 @@ public class InventoryEntryController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while getting the inventory entry</response>
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
-        try
-        {
-            var entry = await _service.GetById(id);
-            if (entry == null)
-                return NotFound(new { message = "Inventory entry not found" });
-            return Ok(entry);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while getting the inventory entry.",
-                error = ex.Message
-            });
-        }
+        var result = await _service.Send(new GetInventoryEntryByIdQuery(id), cancellationToken);
+        if (result.Value == null)
+            return NotFound(new { message = "Inventory entry not found" });
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -65,21 +62,13 @@ public class InventoryEntryController : ControllerBase
     /// <response code="500">An error occurred while creating the inventory entry</response>
     /// <response code="401">Unauthorized</response>
     [HttpPost]
-    public async Task<IActionResult> Create(InventoryEntryRequest request)
+    public async Task<IActionResult> Create(InventoryEntryDto request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var entry = await _service.Create(request);
-            return StatusCode(201, entry);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while creating the inventory entry.",
-                error = ex.Message
-            });
-        }
+        var result = await _service.Send(new CreateInventoryEntryCommand(request), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -90,21 +79,13 @@ public class InventoryEntryController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while getting the inventory entry</response>
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, InventoryEntryRequest request)
+    public async Task<IActionResult> Update(int id, InventoryEntryDto request, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _service.Update(id, request);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while updating the inventory entry.",
-                error = ex.Message
-            });
-        }
+        var result = await _service.Send(new UpdateInventoryEntryCommand(id, request), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -115,21 +96,13 @@ public class InventoryEntryController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while deleting the inventory entry</response>
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _service.Delete(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while deleting the inventory entry.",
-                error = ex.Message
-            });
-        }
+        var result = await _service.Send(new DeleteInventoryEntryCommand(id), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
 }

@@ -16,7 +16,7 @@ public interface IInventoryEntryDetailRepository
     /// </summary>
     /// <param name="detail"></param>
     /// <returns>ID</returns> 
-    Task<int> Create(InventoryEntryDetail detail);
+    Task<int> Create(IEnumerable<InventoryEntryDetail> details);
 
     /// <summary>
     /// Deletes a entry detail.

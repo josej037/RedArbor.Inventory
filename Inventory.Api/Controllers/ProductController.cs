@@ -1,5 +1,9 @@
-﻿using Inventory.Application.DTOs.Product;
-using Inventory.Application.Services.Interfaces;
+﻿using Inventory.Application.Products.Commands.CreateProduct;
+using Inventory.Application.Products.Commands.DeleteProduct;
+using Inventory.Application.Products.Commands.UpdateProduct;
+using Inventory.Application.Products.Queries.GetProductById;
+using Inventory.Application.Products.Queries.GetProducts;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
@@ -11,9 +15,9 @@ namespace Inventory.Api.Controllers;
 [Route("api/[controller]"), Description("Manage products")]
 public class ProductController : ControllerBase
 {
-    private readonly IProductService _product;
+    private readonly IMediator _product;
 
-    public ProductController(IProductService product)
+    public ProductController(IMediator product)
     {
         _product = product;
     }
@@ -27,8 +31,12 @@ public class ProductController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var products = await _product.GetAll();
-        return Ok(products);
+        var result = await _product.Send(new GetProductsQuery());
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -40,23 +48,12 @@ public class ProductController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while getting the product</response>
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
-        try
-        {
-            var product = await _product.GetById(id);
-            if (product == null)
-                return NotFound(new { message = "Product not found" });
-            return Ok(product);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while getting the product.",
-                error = ex.Message
-            });
-        }
+        var product = await _product.Send(new GetProductByIdQuery(id), cancellationToken);
+        if (product == null)
+            return NotFound(new { message = "Product not found" });
+        return Ok(product);
     }
 
     /// <summary>
@@ -67,21 +64,13 @@ public class ProductController : ControllerBase
     /// <response code="500">An error occurred while creating the product</response>
     /// <response code="401">Unauthorized</response>
     [HttpPost]
-    public async Task<IActionResult> Create(ProductRequest request)
+    public async Task<IActionResult> Create(CreateProductRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var product = await _product.Create(request);
-            return StatusCode(201, product);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while creating the product.",
-                error = ex.Message
-            });
-        }
+        var result = await _product.Send(new CreateProductCommand(request), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -92,21 +81,13 @@ public class ProductController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while updating the product</response>
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, ProductRequest request)
+    public async Task<IActionResult> Update(int id, UpdateProductRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _product.Update(id, request);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while updating the product.",
-                error = ex.Message
-            });
-        }
+        var result = await _product.Send(new UpdateProductCommand(id, request), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -117,20 +98,12 @@ public class ProductController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while deleting the product</response>
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _product.Delete(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while deleting the product.",
-                error = ex.Message
-            });
-        }
+        var result = await _product.Send(new DeleteProductCommand(id), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 }

@@ -1,5 +1,5 @@
-﻿using Inventory.Application.DTOs.Auth;
-using Inventory.Application.Services.Interfaces;
+﻿using Inventory.Application.Auth.Queries.GetLogin;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +11,11 @@ namespace Inventory.Api.Controllers;
 
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
+    private readonly IMediator _auth;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IMediator auth)
     {
-        _authService = authService;
+        _auth = auth;
     }
 
     /// <summary>
@@ -26,22 +26,15 @@ public class AuthController : ControllerBase
     /// <response code="401">Invalid credentials</response>   
     /// <response code="500">An error occurred while logging in.</response>   
     [HttpPost]
-    public async Task<IActionResult> Login(LoginRequest request)
+    public async Task<IActionResult> Login(GetLoginRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var user = await _authService.Login(request);
-            if (user == null)
-                return Unauthorized();
-            return Ok(user);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while logging in.",
-                error = ex.Message
-            });
-        }
+        var result = await _auth.Send(new GetLoginQuery(request), cancellationToken);
+
+        if (!result.IsSuccess)
+            return Unauthorized(result.Error);
+
+        return Ok(result.Value);
+
+
     }
 }

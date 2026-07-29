@@ -1,6 +1,9 @@
-using Inventory.Application.DTOs.Category;
+using Inventory.Application.Categories.Commands.CreateCategory;
+using Inventory.Application.Categories.Commands.DeleteCategory;
+using Inventory.Application.Categories.Commands.UpdateCategory;
+using Inventory.Application.Categories.Queries.GetCategories;
+using Inventory.Application.Categories.Queries.GetCategoryById;
 using Inventory.Application.Interfaces;
-using Inventory.Application.Services;
 using Inventory.Domain.Entities;
 using Moq;
 
@@ -9,11 +12,20 @@ namespace Inventory.Tests;
 public class CategoryServiceTests
 {
     private readonly Moq.Mock<ICategoryRepository> _Repository;
-    private readonly CategoryService _Service;
+    private readonly GetCategoriesQueryHandler _handlerList;
+    private readonly GetCategoryByIdQueryHandler _handlerByIdQ;
+    private readonly CreateCategoryCommandHandler _handlerCreate;
+    private readonly UpdateCategoryCommandHandler _handlerUpdate;
+    private readonly DeleteCategoryCommandHandler _handlerDelete;
+
     public CategoryServiceTests()
     {
         _Repository = new Mock<ICategoryRepository>();
-        _Service = new CategoryService(_Repository.Object);
+        _handlerList = new GetCategoriesQueryHandler(_Repository.Object);
+        _handlerByIdQ = new GetCategoryByIdQueryHandler(_Repository.Object);
+        _handlerCreate = new CreateCategoryCommandHandler(_Repository.Object);
+        _handlerUpdate = new UpdateCategoryCommandHandler(_Repository.Object);
+        _handlerDelete = new DeleteCategoryCommandHandler(_Repository.Object);
     }
 
     [Fact]
@@ -27,10 +39,12 @@ public class CategoryServiceTests
         };
         _Repository.Setup(repo => repo.GetAll()).ReturnsAsync(categories);
         // Act
-        var result = await _Service.GetAll();
+        var result = await _handlerList.Handle(
+             new GetCategoriesQuery(),
+             CancellationToken.None);
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(2, result.Count());
+        Assert.Equal(2, result!.Value!.Count);
 
         _Repository.Verify(repo => repo.GetAll(), Times.Once);
     }
@@ -42,10 +56,12 @@ public class CategoryServiceTests
         var category = new Category { Id = 1, Name = "Home", Description = "Home & Furniture", Active = true };
         _Repository.Setup(repo => repo.GetById(1)).ReturnsAsync(category);
         // Act
-        var result = await _Service.GetById(1);
+        var result = await _handlerByIdQ.Handle(
+             new GetCategoryByIdQuery(1),
+             CancellationToken.None);
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(1, result.Id);
+        Assert.Equal(1, result.Value!.Id);
     }
 
     [Fact]
@@ -54,23 +70,27 @@ public class CategoryServiceTests
         // Arrange
         _Repository.Setup(repo => repo.GetById(1)).ReturnsAsync((Category?)null);
         // Act
-        var result = await _Service.GetById(1);
+        var result = await _handlerByIdQ.Handle(
+             new GetCategoryByIdQuery(1),
+             CancellationToken.None);
         // Assert
-        Assert.Null(result);
+        Assert.True(result.IsFailure);
     }
 
     [Fact]
     public async Task Create_ReturnCreatedCategory()
     {
         // Arrange
-        var request = new CategoryRequest { Name = "Home", Description = "Home & Furniture" };
+        var request = new CreateCategoryRequest { Name = "Home", Description = "Home & Furniture" };
         var category = new Category { Id = 1, Name = "Home", Description = "Home & Furniture", Active = true };
         _Repository.Setup(repo => repo.Create(It.IsAny<Category>())).ReturnsAsync(1);
         // Act
-        var result = await _Service.Create(request);
+        var result = await _handlerCreate.Handle(
+             new CreateCategoryCommand(request),
+             CancellationToken.None);
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(1, result.Id);
+        Assert.Equal(1, result.Value);
         _Repository.Verify(repo => repo.Create(It.Is<Category>(
              c => c.Name == "Home" &&
              c.Description == "Home & Furniture")
@@ -81,12 +101,14 @@ public class CategoryServiceTests
     public async Task Updated_ReturnUpdatedCategory()
     {
         // Arrange
-        var request = new CategoryRequest { Name = "living room", Description = "living rooms" };
+        var request = new UpdateCategoryRequest { Name = "living room", Description = "living rooms" };
         var category = new Category { Id = 1, Name = "Home", Description = "Home & Furniture", Active = true };
         _Repository.Setup(repo => repo.GetById(1)).ReturnsAsync(category);
         _Repository.Setup(repo => repo.Update(It.IsAny<Category>())).Returns(Task.CompletedTask);
         // Act
-        await _Service.Update(1, request);
+        await _handlerUpdate.Handle(
+             new UpdateCategoryCommand(1, request),
+             CancellationToken.None);
         // Assert
         Assert.Equal("living room", category.Name);
         Assert.Equal("living rooms", category.Description);
@@ -101,7 +123,9 @@ public class CategoryServiceTests
         _Repository.Setup(repo => repo.GetById(1)).ReturnsAsync(category);
         _Repository.Setup(repo => repo.Delete(1)).Returns(Task.CompletedTask);
         // Act
-        await _Service.Delete(1);
+        await _handlerDelete.Handle(
+             new DeleteCategoryCommand(1),
+             CancellationToken.None);
         // Assert
         _Repository.Verify(repo => repo.Delete(1), Times.Once);
     }

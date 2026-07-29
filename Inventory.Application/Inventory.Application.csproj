@@ -7,6 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\**" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="DTOs\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="DTOs\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="InventoryEntries\Commands\CreateInventoryEntry\CreateInventoryEntryDetailRequest.cs" />
+    <Compile Remove="InventoryEntries\Commands\CreateInventoryEntry\CreateInventoryEntryRequest.cs" />
+    <Compile Remove="InventoryEntries\Commands\UpdateInventoryEntry\UpdateInventoryEntryDetailRequest.cs" />
+    <Compile Remove="InventoryEntries\Commands\UpdateInventoryEntry\UpdateInventoryEntryRequest.cs" />
+    <Compile Remove="InventoryExits\Commands\CreateInventoryExit\CreateInventoryExitDetailRequest.cs" />
+    <Compile Remove="InventoryExits\Commands\CreateInventoryExit\CreateInventoryExitRequest.cs" />
+    <Compile Remove="InventoryExits\Commands\UpdateInventoryExit\UpdateInventoryExitDetailRequest.cs" />
+    <Compile Remove="InventoryExits\Commands\UpdateInventoryExit\UpdateInventoryExitRequest.cs" />
+    <Compile Remove="InventoryMovements\Queries\GetInventoryMovements\GetInventoryMovementsRequest.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
   </ItemGroup>
 

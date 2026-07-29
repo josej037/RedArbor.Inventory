@@ -23,7 +23,7 @@ public class InventoryEntryDetailRepository : IInventoryEntryDetailRepository
     /// </summary>
     /// <param name="detail"></param>
     /// <returns>ID</returns> 
-    public async Task<int> Create(InventoryEntryDetail detail)
+    public async Task<int> Create(IEnumerable<InventoryEntryDetail> detail)
     {
         const string sql = @"
             INSERT INTO InventoryEntryDetails
@@ -33,8 +33,10 @@ public class InventoryEntryDetailRepository : IInventoryEntryDetailRepository
             SELECT CAST(SCOPE_IDENTITY() AS INT);
             ";
         using var connection = _connection.CreateConnection();
-        return await connection.ExecuteScalarAsync<int>(sql, detail);
+        return await connection.ExecuteAsync(sql, detail);
+
     }
+
 
     /// <summary>
     /// Deletes a entry detail from the database.

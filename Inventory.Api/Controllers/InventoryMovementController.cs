@@ -1,4 +1,6 @@
-﻿using Inventory.Application.Services.Interfaces;
+﻿using Inventory.Application.InventoryMovements.Queries.GetInventoryMovements;
+using Inventory.Domain.Enums;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +11,9 @@ namespace Inventory.Api.Controllers;
 [Route("api/[controller]")]
 public class InventoryMovementController : ControllerBase
 {
-    private readonly IInventoryMovementService _service;
+    private readonly IMediator _service;
 
-    public InventoryMovementController(IInventoryMovementService service)
+    public InventoryMovementController(IMediator service)
     {
         _service = service;
     }
@@ -27,7 +29,10 @@ public class InventoryMovementController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(int movementType)
     {
-        var exits = await _service.GetAllByMovementType(movementType);
-        return Ok(exits);
+        var result = await _service.Send(new GetInventoryMovementQuery((MovementType)movementType));
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 }

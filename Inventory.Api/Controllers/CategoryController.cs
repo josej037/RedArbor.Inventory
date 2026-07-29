@@ -1,5 +1,9 @@
-﻿using Inventory.Application.DTOs.Category;
-using Inventory.Application.Services.Interfaces;
+﻿using Inventory.Application.Categories.Commands.CreateCategory;
+using Inventory.Application.Categories.Commands.DeleteCategory;
+using Inventory.Application.Categories.Commands.UpdateCategory;
+using Inventory.Application.Categories.Queries.GetCategories;
+using Inventory.Application.Categories.Queries.GetCategoryById;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +14,9 @@ namespace Inventory.Api.Controllers;
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
-    private readonly ICategoryService _category;
+    private readonly IMediator _category;
 
-    public CategoryController(ICategoryService category)
+    public CategoryController(IMediator category)
     {
         _category = category;
     }
@@ -26,7 +30,7 @@ public class CategoryController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var categories = await _category.GetAll();
+        var categories = await _category.Send(new GetCategoriesQuery());
         return Ok(categories);
     }
 
@@ -39,23 +43,16 @@ public class CategoryController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while getting the category</response>
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
-        try
-        {
-            var category = await _category.GetById(id);
-            if (category == null)
-                return NotFound(new { message = "Category not found" });
-            return Ok(category);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while getting the category.",
-                error = ex.Message
-            });
-        }
+        var category = await _category.Send(
+        new GetCategoryByIdQuery(id),
+        cancellationToken);
+
+        if (category is null)
+            return NotFound();
+
+        return Ok(category);
     }
 
     /// <summary>
@@ -66,21 +63,14 @@ public class CategoryController : ControllerBase
     /// <response code="500">An error occurred while creating the category</response>
     /// <response code="401">Unauthorized</response>
     [HttpPost]
-    public async Task<IActionResult> Create(CategoryRequest request)
+    public async Task<IActionResult> Create(CreateCategoryRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var category = await _category.Create(request);
-            return StatusCode(201, category);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while creating the category.",
-                error = ex.Message
-            });
-        }
+        var result = await _category.Send(new CreateCategoryCommand(request), cancellationToken);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -91,21 +81,13 @@ public class CategoryController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while updating the category</response>
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, CategoryRequest request)
+    public async Task<IActionResult> Update(int id, UpdateCategoryRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _category.Update(id, request);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while updating the category.",
-                error = ex.Message
-            });
-        }
+        var result = await _category.Send(new UpdateCategoryCommand(id, request), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     /// <summary>
@@ -116,20 +98,12 @@ public class CategoryController : ControllerBase
     /// <response code="401">Unauthorized</response>
     /// <response code="500">An error occurred while deleting the category</response>
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _category.Delete(id);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new
-            {
-                message = "An error occurred while deleting the category.",
-                error = ex.Message
-            });
-        }
+        var result = await _category.Send(new DeleteCategoryCommand(id), cancellationToken);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 }
